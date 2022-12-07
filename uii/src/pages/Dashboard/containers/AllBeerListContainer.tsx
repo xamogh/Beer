@@ -15,6 +15,8 @@ const ListContainerProps: GridProps = {
     height: "calc(100vh - 128px)",
 };
 
+let page = 2;
+
 export default function AllBeerListContainer() {
     const { isLoading, data, fetchNextPage } = useBeers();
 
@@ -25,7 +27,14 @@ export default function AllBeerListContainer() {
 
     return (
         <Box pb={2}>
-            <Button onClick={() => fetchNextPage()}>Next page</Button>
+            <Button
+                onClick={() => {
+                    fetchNextPage({ pageParam: page });
+                    page++;
+                }}
+            >
+                Next page
+            </Button>
             <List<PunkApiBeer>
                 items={completeDataSet}
                 itemRenderer={(row) => {

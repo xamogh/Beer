@@ -23,5 +23,6 @@ const Server = axios.create({
 });
 
 Server.interceptors.request.use(RequestLogger, ErrorLogger);
+PunkApi.interceptors.request.use(RequestLogger, ErrorLogger);
 
 export { PunkApi };

@@ -28,18 +28,13 @@ export const getBeersApi = ({ page }: { page: number }) =>
 export const getIngredientNames = (punkApiBeer: PunkApiBeer) =>
     Object.keys(punkApiBeer.ingredients).join(", ");
 
-var page = 1;
-
 export function useBeers() {
     return useInfiniteQuery(
         ["beers"],
-        async () => {
-            const response = await getBeersApi({ page });
+        async ({ pageParam = 1 }) => {
+            const response = await getBeersApi({ page: pageParam });
             return response.data;
         },
-        {
-            getPreviousPageParam: (firstPage) => undefined,
-            getNextPageParam: (lastPage) => (page += 1),
-        }
+        { refetchOnWindowFocus: false }
     );
 }
