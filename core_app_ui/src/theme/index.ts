@@ -1,9 +1,9 @@
 import { createTheme } from "@mui/material";
-import { indigo } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 
 let theme = createTheme({
     palette: {
-        primary: indigo,
+        primary: blue,
     },
     breakpoints: {
         values: {

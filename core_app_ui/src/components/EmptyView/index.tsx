@@ -4,7 +4,7 @@ import * as React from "react";
 const EmptyViewRoot = styled("div")(() => ({
     width: "100%",
     height: "100%",
-    backgroundColor: "#f3f0f0",
+    backgroundColor: "#f4f4f4",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
