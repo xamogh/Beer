@@ -1,16 +1,10 @@
-import { GridProps, Link, styled, Tooltip, Typography } from "@mui/material";
+import { Box, Link, styled, Typography } from "@mui/material";
 import * as React from "react";
-import { getIngredientNames, PunkApiBeer } from "../../../api/punkApi";
+import { BeerQuery, useMyBeers } from "../../../api/beerServer";
 import EmptyView from "../../../components/EmptyView";
 import InformationCard from "../../../components/InformationCard";
 import List from "../../../components/List";
 import AddBeerContainer from "./AddBeerContainer";
-
-const ListContainerProps: GridProps = {
-    rowSpacing: 3,
-    columnSpacing: { xs: 1, sm: 2, md: 3 },
-    height: "calc(100vh - 128px)",
-};
 
 const StyledLink = styled(Link)(() => ({
     textDecoration: "none",
@@ -20,31 +14,26 @@ const StyledLink = styled(Link)(() => ({
 }));
 
 export default function MyBeerListContainer() {
+    const { data = [] } = useMyBeers();
+
     return (
-        <div>
-            <List<PunkApiBeer>
-                items={[]}
+        <Box
+            height="calc(100vh - 140px)"
+            overflow="auto"
+            p={1}
+            id="list__all_beers"
+        >
+            <List<BeerQuery>
+                items={data}
                 itemRenderer={(row) => {
-                    const { name, tagline, description, image_url } = row;
+                    const { name, genre, description, image } = row;
                     return (
                         <InformationCard
                             title={name}
-                            subtitle={tagline}
+                            subtitle={genre}
                             text={description}
                             pictureElement={
-                                <Tooltip
-                                    title={`Ingredients: ${getIngredientNames(
-                                        row
-                                    )}`}
-                                    arrow
-                                    placement="top"
-                                >
-                                    <img
-                                        src={image_url}
-                                        height="120px"
-                                        alt="beer"
-                                    />
-                                </Tooltip>
+                                <img src={image} height="120px" alt="beer" />
                             }
                         />
                     );
@@ -69,8 +58,7 @@ export default function MyBeerListContainer() {
                     </EmptyView>
                 }
                 onItemClick={(item) => console.log(item)}
-                containerProps={ListContainerProps}
             />
-        </div>
+        </Box>
     );
 }

@@ -19,10 +19,10 @@ const PunkApi = axios.create({
 });
 
 const Server = axios.create({
-    baseURL: "https://some-domain.com/api/",
+    baseURL: "http://127.0.0.1:5500/api",
 });
 
 Server.interceptors.request.use(RequestLogger, ErrorLogger);
 PunkApi.interceptors.request.use(RequestLogger, ErrorLogger);
 
-export { PunkApi };
+export { PunkApi, Server };

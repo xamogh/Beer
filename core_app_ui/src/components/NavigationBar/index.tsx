@@ -47,7 +47,7 @@ const SmDownBlockUpNone = (theme: Theme) => ({
     },
 });
 
-const StyledLogoNav = styled(Typography)(({ theme }) => ({
+const StyledLogoNav = styled(Box)(({ theme }) => ({
     flexGrow: 1,
     ...SmDownNoneUpBlock(theme),
 }));
@@ -88,7 +88,7 @@ export interface NavigationItemSchema {
 }
 
 interface Props {
-    logo: string;
+    logo: React.ReactNode;
     navigationItems: Array<NavigationItemSchema>;
 }
 
@@ -127,7 +127,7 @@ export default function DrawerAppBar(props: Props) {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <StyledLogoNav variant="h6">{logo}</StyledLogoNav>
+                        <StyledLogoNav>{logo}</StyledLogoNav>
                         <StyledDrawerLinksContainer>
                             {navigationItems.map(
                                 ({ id, label, navigateTo }) => (

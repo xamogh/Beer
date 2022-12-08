@@ -28,7 +28,7 @@ export const getBeersApi = ({ page }: { page: number }) =>
 export const getIngredientNames = (punkApiBeer: PunkApiBeer) =>
     Object.keys(punkApiBeer.ingredients).join(", ");
 
-export function useBeers() {
+export function usePunkApiBeers() {
     return useInfiniteQuery(
         ["beers"],
         async ({ pageParam = 1 }) => {

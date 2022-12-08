@@ -1,6 +1,6 @@
 create table "beer"
 (
-    beer_id         bigserial primary key,
+    id              bigserial primary key,
     name            text collate "case_insensitive" not null,
     genre           text collate "case_insensitive" not null,
     description     text                                           not null default '',

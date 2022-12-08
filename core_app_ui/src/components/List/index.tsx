@@ -35,7 +35,7 @@ const DefaultListGridItemProps: GridProps = {
 };
 
 // @todo -> Add virtualization
-export default function List<T extends { id: number }>(props: Props<T>) {
+function List<T extends { id: number }>(props: Props<T>) {
     const {
         items,
         onItemClick,
@@ -83,3 +83,5 @@ export default function List<T extends { id: number }>(props: Props<T>) {
         </>
     );
 }
+
+export default React.memo(List) as typeof List;

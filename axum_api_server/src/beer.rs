@@ -1,4 +1,5 @@
 use axum::{extract::Extension, http::StatusCode, Json};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 
@@ -12,7 +13,8 @@ pub struct CreateBeerRequest {
 
 #[derive(Serialize, Deserialize)]
 pub struct BeerFromQuery {
-    beer_id: i64,
+    id: i64,
+    created_at: DateTime<Utc>,
     name: String,
     genre: String,
     image: Option<String>,
@@ -24,7 +26,7 @@ pub async fn get_beers(
 ) -> Result<Json<Vec<BeerFromQuery>>, (StatusCode, String)> {
     let result = sqlx::query_as!(
         BeerFromQuery,
-        "select beer_id, name,genre, image, description from beer"
+        "select id, name,genre, image, description, created_at from beer"
     )
     .fetch_all(&db)
     .await
@@ -42,7 +44,7 @@ pub async fn create_beer(
         r#"
             insert into beer (name, genre, description, image)
             values ($1, $2, $3, $4)
-            returning beer_id, name, genre, description, image
+            returning id, name, genre, description, image, created_at
         "#,
         req.name,
         req.genre,

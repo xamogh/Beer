@@ -5,13 +5,26 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    styled,
     TextField,
 } from "@mui/material";
 import Modal, { useModal } from "@ebay/nice-modal-react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, Resolver } from "react-hook-form";
+import { BeerMutation, useCreateMyBeer } from "../../../api/beerServer";
+import { LoadingButton } from "@mui/lab";
+import beerImage from "../../../assets/beer.png";
+
+const StyledImage = styled("img")(() => ({
+    border: "1px solid lightgrey",
+    marginBottom: "16px",
+    padding: "16px",
+}));
 
 interface CreateBeerFormDialogProps {
-    onActionEvent: () => void;
+    onActionEvent: (
+        mutationValues: BeerMutation,
+        nextAction: () => void
+    ) => void;
 }
 
 const CreateBeerFormDialog = Modal.create(
@@ -19,14 +32,28 @@ const CreateBeerFormDialog = Modal.create(
         const { onActionEvent } = props;
 
         const modal = useModal();
-        const { handleSubmit, reset, control } = useForm({
+        const {
+            handleSubmit,
+            reset,
+            control,
+            formState: { errors },
+        } = useForm<BeerMutation>({
             defaultValues: {
-                beerName: "",
-                genre: "",
+                name: "",
                 description: "",
+                genre: "",
+                image: beerImage,
             },
         });
-        const onSubmit = (data: any) => console.log(data);
+
+        console.log(errors);
+
+        const onSubmit = async (data: BeerMutation) => {
+            await onActionEvent(data, () => {
+                modal.hide();
+                reset();
+            });
+        };
 
         return (
             <Dialog
@@ -38,16 +65,15 @@ const CreateBeerFormDialog = Modal.create(
                 fullWidth
             >
                 <form>
-                    <DialogTitle
-                        id="alert-dialog-title"
-                        onClick={onActionEvent}
-                    >
+                    <DialogTitle id="alert-dialog-title">
                         Add a New Beer
                     </DialogTitle>
                     <DialogContent>
+                        <StyledImage src={beerImage} height="120px" />
                         <Controller
-                            name="beerName"
+                            name="name"
                             control={control}
+                            rules={{ required: "This field is required" }}
                             render={({ field: { onChange, value } }) => (
                                 <TextField
                                     onChange={onChange}
@@ -55,11 +81,14 @@ const CreateBeerFormDialog = Modal.create(
                                     value={value}
                                     size="small"
                                     placeholder="Name"
+                                    error={!!errors.name}
+                                    helperText={errors.name?.message}
                                 />
                             )}
                         />
                         <Controller
                             name="genre"
+                            rules={{ required: "This field is required" }}
                             control={control}
                             render={({ field: { onChange, value } }) => (
                                 <TextField
@@ -69,11 +98,14 @@ const CreateBeerFormDialog = Modal.create(
                                     value={value}
                                     size="small"
                                     placeholder="Genre"
+                                    error={!!errors.genre}
+                                    helperText={errors.genre?.message}
                                 />
                             )}
                         />
                         <Controller
                             name="description"
+                            rules={{ required: "This field is required" }}
                             control={control}
                             render={({ field: { onChange, value } }) => (
                                 <TextField
@@ -83,8 +115,10 @@ const CreateBeerFormDialog = Modal.create(
                                     value={value}
                                     size="small"
                                     multiline
-                                    rows={8}
+                                    rows={4}
                                     placeholder="Description"
+                                    error={!!errors.description}
+                                    helperText={errors.description?.message}
                                 />
                             )}
                         />
@@ -98,13 +132,13 @@ const CreateBeerFormDialog = Modal.create(
                         >
                             Cancel
                         </Button>
-                        <Button
+                        <LoadingButton
                             onClick={handleSubmit(onSubmit)}
                             autoFocus
                             variant="contained"
                         >
                             Save
-                        </Button>
+                        </LoadingButton>
                     </DialogActions>
                 </form>
             </Dialog>
@@ -119,9 +153,17 @@ interface Props {
 export default function AddBeerContainer(props: Props) {
     const { render } = props;
 
+    const createMyBeerMutation = useCreateMyBeer();
+
     const onAddEvent = () => {
         Modal.show(CreateBeerFormDialog, {
-            onActionEvent: () => console.log("do"),
+            onActionEvent: async (
+                data: BeerMutation,
+                nextActions: () => void
+            ) => {
+                await createMyBeerMutation.mutateAsync(data);
+                nextActions();
+            },
         });
     };
 

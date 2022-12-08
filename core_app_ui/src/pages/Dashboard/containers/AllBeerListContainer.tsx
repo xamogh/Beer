@@ -3,7 +3,7 @@ import * as React from "react";
 import {
     getIngredientNames,
     PunkApiBeer,
-    useBeers,
+    usePunkApiBeers,
 } from "../../../api/punkApi";
 import EmptyView from "../../../components/EmptyView";
 import InformationCard from "../../../components/InformationCard";
@@ -13,7 +13,7 @@ import scrollOnMutation from "../../../utils/scrollOnMutation";
 let nextPage = 2;
 
 export default function AllBeerListContainer() {
-    const { isLoading, data, fetchNextPage, isFetching } = useBeers();
+    const { isLoading, data, fetchNextPage, isFetching } = usePunkApiBeers();
 
     const completeDataSet = React.useMemo(() => {
         if (!data) return [];
@@ -21,7 +21,12 @@ export default function AllBeerListContainer() {
     }, [data]);
 
     return (
-        <Box height="calc(100vh - 140px)" overflow="auto" p={1} id="c__list">
+        <Box
+            height="calc(100vh - 140px)"
+            overflow="auto"
+            p={1}
+            id="list__all_beers"
+        >
             <List<PunkApiBeer>
                 items={completeDataSet}
                 paginatorProps={{
@@ -29,7 +34,7 @@ export default function AllBeerListContainer() {
                     onPageNextClick: () => {
                         fetchNextPage({ pageParam: nextPage });
                         nextPage++;
-                        scrollOnMutation("c__list", 64);
+                        scrollOnMutation("list__all_beers", 64);
                     },
                     fetching: isFetching,
                 }}

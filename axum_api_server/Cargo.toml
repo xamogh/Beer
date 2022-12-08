@@ -11,7 +11,7 @@ authors = [
 # Core dependencies: runtime, HTTP framework and database client.
 tokio = { version = "1.14.0", features = ["macros", "rt-multi-thread"] }
 axum = { version = "0.3.4", features = ["tower-log"] }
-sqlx = { version = "0.5", features = ["runtime-tokio-native-tls", "postgres", "uuid", "time"] }
+sqlx = { version = "0.5", features = ["runtime-tokio-native-tls", "postgres", "uuid", "time", "chrono"] }
 clap = "3.0.0-beta.5"
 uuid = { version = "0.8", features = ["serde"] }
 dotenv = "0.15.0"
@@ -24,3 +24,4 @@ anyhow = "1.0.66"
 tower = "0.4.13"
 tower-http = { version = "0.3.5", features=["full"] }
 axum-macros = "0.3.0"
+chrono = { version= "0.4.23", features = ["serde"] }
