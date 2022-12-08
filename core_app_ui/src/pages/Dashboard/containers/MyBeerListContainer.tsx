@@ -17,12 +17,7 @@ export default function MyBeerListContainer() {
     const { data = [] } = useMyBeers();
 
     return (
-        <Box
-            height="calc(100vh - 140px)"
-            overflow="auto"
-            p={1}
-            id="list__all_beers"
-        >
+        <Box height="calc(100vh - 140px)" overflow="auto" p={1}>
             <List<BeerQuery>
                 items={data}
                 itemRenderer={(row) => {

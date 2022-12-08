@@ -2,7 +2,7 @@ import { getBeersApi } from ".";
 
 describe("Punk Api requests suite", () => {
     test("should get beers", async () => {
-        const response = await getBeersApi({ page: 0 });
+        const response = await getBeersApi({ page: 1 });
         expect(response).not.toBeNull();
         expect(response.status).toBe(200);
         expect(Array.isArray(response.data)).toBe(true);

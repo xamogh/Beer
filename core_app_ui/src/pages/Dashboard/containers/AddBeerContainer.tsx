@@ -9,7 +9,7 @@ import {
     TextField,
 } from "@mui/material";
 import Modal, { useModal } from "@ebay/nice-modal-react";
-import { Controller, useForm, Resolver } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { BeerMutation, useCreateMyBeer } from "../../../api/beerServer";
 import { LoadingButton } from "@mui/lab";
 import beerImage from "../../../assets/beer.png";
@@ -46,10 +46,12 @@ const CreateBeerFormDialog = Modal.create(
             },
         });
 
-        console.log(errors);
+        const [loading, setLoading] = React.useState(false);
 
         const onSubmit = async (data: BeerMutation) => {
+            setLoading(true);
             await onActionEvent(data, () => {
+                setLoading(false);
                 modal.hide();
                 reset();
             });
@@ -136,6 +138,7 @@ const CreateBeerFormDialog = Modal.create(
                             onClick={handleSubmit(onSubmit)}
                             autoFocus
                             variant="contained"
+                            loading={loading}
                         >
                             Save
                         </LoadingButton>
