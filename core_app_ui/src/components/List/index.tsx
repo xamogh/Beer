@@ -34,6 +34,7 @@ const DefaultListGridItemProps: GridProps = {
     md: 6,
 };
 
+// @todo -> Add virtualization
 export default function List<T extends { id: number }>(props: Props<T>) {
     const {
         items,
