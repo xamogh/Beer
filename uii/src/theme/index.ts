@@ -3,7 +3,7 @@ import { indigo } from "@mui/material/colors";
 
 let theme = createTheme({
     palette: {
-        primary: indigo
+        primary: indigo,
     },
     breakpoints: {
         values: {
@@ -11,10 +11,13 @@ let theme = createTheme({
             sm: 600,
             md: 900,
             lg: 1200,
-            xl: 1536
-        }
+            xl: 1536,
+        },
     },
     typography: {
+        button: {
+            textTransform: "capitalize",
+        },
         fontFamily: [
             "-apple-system",
             "Poppins",
@@ -26,9 +29,9 @@ let theme = createTheme({
             "sans-serif",
             '"Apple Color Emoji"',
             '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"'
-        ].join(",")
-    }
+            '"Segoe UI Symbol"',
+        ].join(","),
+    },
 });
 
 theme = createTheme(theme, {
@@ -38,12 +41,12 @@ theme = createTheme(theme, {
                 root: {
                     "&.Mui-selected": {
                         color: theme.palette.text.primary,
-                        fontWeight: 600
-                    }
-                }
-            }
-        }
-    }
+                        fontWeight: 600,
+                    },
+                },
+            },
+        },
+    },
 });
 
 export default theme;

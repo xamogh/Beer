@@ -1,4 +1,4 @@
-import { Box, Button, GridProps, Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import * as React from "react";
 import {
     getIngredientNames,
@@ -8,17 +8,12 @@ import {
 import EmptyView from "../../../components/EmptyView";
 import InformationCard from "../../../components/InformationCard";
 import List from "../../../components/List";
+import scrollOnMutation from "../../../utils/scrollOnMutation";
 
-const ListContainerProps: GridProps = {
-    rowSpacing: 3,
-    columnSpacing: { xs: 1, sm: 2, md: 3 },
-    height: "calc(100vh - 128px)",
-};
-
-let page = 2;
+let nextPage = 2;
 
 export default function AllBeerListContainer() {
-    const { isLoading, data, fetchNextPage } = useBeers();
+    const { isLoading, data, fetchNextPage, isFetching } = useBeers();
 
     const completeDataSet = React.useMemo(() => {
         if (!data) return [];
@@ -26,17 +21,18 @@ export default function AllBeerListContainer() {
     }, [data]);
 
     return (
-        <Box pb={2}>
-            <Button
-                onClick={() => {
-                    fetchNextPage({ pageParam: page });
-                    page++;
-                }}
-            >
-                Next page
-            </Button>
+        <Box height="calc(100vh - 140px)" overflow="auto" p={1} id="c__list">
             <List<PunkApiBeer>
                 items={completeDataSet}
+                paginatorProps={{
+                    hidePaginator: false,
+                    onPageNextClick: () => {
+                        fetchNextPage({ pageParam: nextPage });
+                        nextPage++;
+                        scrollOnMutation("c__list", 64);
+                    },
+                    fetching: isFetching,
+                }}
                 itemRenderer={(row) => {
                     const { name, tagline, description, image_url } = row;
                     return (
@@ -65,7 +61,6 @@ export default function AllBeerListContainer() {
                 loading={isLoading}
                 emptyView={<EmptyView />}
                 onItemClick={(item) => console.log(item)}
-                containerProps={ListContainerProps}
             />
         </Box>
     );

@@ -1,13 +1,24 @@
+import { ArrowDownwardRounded } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import { Box, Grid, GridProps } from "@mui/material";
 import * as React from "react";
 import Spinner from "../Spinner";
 
+type NoPaginator = { hidePaginator: true };
+type YesPaginator = {
+    hidePaginator: false;
+    onPageNextClick: () => void;
+    fetching: boolean;
+};
+
+type PaginatorProps = NoPaginator | YesPaginator;
 interface Props<T> {
     items: Array<T>;
     onItemClick: (item: T) => void;
     itemRenderer: (item: T) => React.ReactNode;
     emptyView: React.ReactNode;
     loading: boolean;
+    paginatorProps: PaginatorProps;
     containerProps?: GridProps;
     gridItemProps?: GridProps;
 }
@@ -32,6 +43,7 @@ export default function List<T extends { id: number }>(props: Props<T>) {
         loading,
         containerProps = DefaultListContainerProps,
         gridItemProps = DefaultListGridItemProps,
+        paginatorProps,
     } = props;
 
     if (items.length === 0) {
@@ -43,17 +55,30 @@ export default function List<T extends { id: number }>(props: Props<T>) {
     }
 
     return (
-        <Grid container {...containerProps}>
-            {items.map((item) => (
-                <Grid
-                    item
-                    onClick={() => onItemClick(item)}
-                    key={item.id}
-                    {...gridItemProps}
-                >
-                    {itemRenderer(item)}
-                </Grid>
-            ))}
-        </Grid>
+        <>
+            <Grid container {...containerProps}>
+                {items.map((item) => (
+                    <Grid
+                        item
+                        onClick={() => onItemClick(item)}
+                        key={item.id}
+                        {...gridItemProps}
+                    >
+                        {itemRenderer(item)}
+                    </Grid>
+                ))}
+            </Grid>
+            {paginatorProps.hidePaginator ? null : (
+                <Box display="flex" justifyContent="center" my={2}>
+                    <LoadingButton
+                        onClick={paginatorProps.onPageNextClick}
+                        loading={paginatorProps.fetching}
+                        endIcon={<ArrowDownwardRounded />}
+                    >
+                        Load more
+                    </LoadingButton>
+                </Box>
+            )}
+        </>
     );
 }

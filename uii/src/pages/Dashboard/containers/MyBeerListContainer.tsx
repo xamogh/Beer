@@ -49,6 +49,7 @@ export default function MyBeerListContainer() {
                         />
                     );
                 }}
+                paginatorProps={{ hidePaginator: true }}
                 loading={false}
                 emptyView={
                     <EmptyView>

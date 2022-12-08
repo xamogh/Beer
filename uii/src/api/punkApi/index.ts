@@ -35,6 +35,11 @@ export function useBeers() {
             const response = await getBeersApi({ page: pageParam });
             return response.data;
         },
-        { refetchOnWindowFocus: false }
+        {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchIntervalInBackground: true,
+            refetchInterval: 120000,
+        }
     );
 }
